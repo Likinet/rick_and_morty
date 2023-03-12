@@ -1,0 +1,8 @@
+.nav {
+    background-color: chartreuse;
+    padding: 2em;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    margin-bottom: 1em;
+}
