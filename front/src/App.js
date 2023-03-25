@@ -26,13 +26,13 @@ function App () {
 
   //! EVENT HANDLERS
   const onSearch = (id) => {
-    const URL_BASE = "https://be-a-rym.up.railway.app/api";
-    const KEY = "45020e3e8f8b.95ada2dbf989fba4decf";
+    const URL_BASE = "http://localhost:3001/rickandmorty/onsearch/";
+    // const KEY = "45020e3e8f8b.95ada2dbf989fba4decf";
 
     if (characters.find(char => char.id === id)){
       return window.alert("personaje repetido");
     };
-    fetch(`${URL_BASE}/character/${id}?key=${KEY}`)
+    fetch(`${URL_BASE}/character/${id}`)
       .then((response) => response.json())
       .then((data) => {
         if (data.name){
