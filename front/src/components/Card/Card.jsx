@@ -1,20 +1,36 @@
 import style from "./Card.module.css";
 import { Link } from "react-router-dom";
-import { agregarFavorito, quitarFavorito} from '../../redux/actions';
+import { removeFavorite, getFavorites} from '../../redux/actions';
 import { connect } from 'react-redux';
 import { useEffect, useState } from 'react';
+import axios from 'axios';
+import { useDispatch } from "react-redux";
 
-function Card({id, name, species, gender, image, onClose, agregarFavorito, quitarFavorito, myFavorites}) {
+function Card({id, name, species, gender, image, onClose, myFavorites}) {
+   const dispatch = useDispatch();
 
    const [isFav, setIsFav] = useState(false);
+
+   const addFavorite = (character) => {
+      axios
+         .post('http://localhost:3001/rickandmorty/fav', character)
+         .then((response) => console.log('add favorite ok'));
+   };
+
+   const removeFavorite = async (id) => {
+      await axios
+         .delete(`http://localhost:3001/rickandmorty/fav/${id}`);
+      dispatch(getFavorites());
+      alert('Eliminado con éxito!');
+   };
 
    const handleFavorite = () => {
       if (isFav) {
          setIsFav(false);
-         quitarFavorito(id);
+         removeFavorite(id);  
       } else {
          setIsFav(true);
-         agregarFavorito({id, name, species, gender, image, onClose, agregarFavorito, quitarFavorito, myFavorites})
+         addFavorite({id, name, species, gender, image})
       }
    }
 
@@ -35,7 +51,7 @@ function Card({id, name, species, gender, image, onClose, agregarFavorito, quita
                <button onClick={handleFavorite}>🤍</button>
             )
          }
-         <button className={style.closeButton} onClick={() => onClose(id)}>X</button>
+         <button className={style.closeButton} onClick={() => {removeFavorite(id); onClose(id)}}>X</button>
          <Link to={('/detail/'+id)} >
             <h2>{name}</h2>
          </Link>
@@ -54,11 +70,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
    return {
-      agregarFavorito: (character) => {
-         dispatch(agregarFavorito(character))
-      },
-      quitarFavorito: (id) => {
-         dispatch(quitarFavorito(id))
+      removeFavorite: (id) => {
+         dispatch(removeFavorite(id))
       }
    }
 };

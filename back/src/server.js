@@ -1,44 +1,19 @@
-const http = require('http');
-const getCharById = require('./controllers/getCharById');
-const getCharDetail = require('./controllers/getCharDetail');
+require('dotenv').config();
+const express = require('express');
+const router = require('./routes');
+const morgan = require('morgan');
+const cors = require('cors');
 
-http.createServer((req, res) => {
-    const { url } = req;
+const PORT = process.env.PORT || 3001;
 
-    res.setHeader('Access-Control-Allow-Origin', '*');
+const server = express();
 
-    if (url.includes('onsearch')) {
-        const id = url.split('/').at(-1);
+server.use(express.json());
+server.use(morgan('dev'));
+server.use(cors());
 
-        getCharById(res, id)
-    }
-    if (url.includes('detail')){
-        const id = url.split('/').at(-1);
-        
-        getCharDetail(res, id)
-    }
-})
-.listen(3001, 'localhost')
+server.use(router);
 
-// const http = require('http');
-// const data = require('./utils/data')
-
-// http
-//     .createServer((req, res)=> {
-//         const { url } = req;
-
-//         res.setHeader('Access-Control-Allow-Origin', '*');
-//         if (url.includes('rickandmorty/character')){
-//             const id = url.split('/').at(-1);
-//             const character = data.find(char => char.id == id);
-
-//             if (character) {
-//                 res.writeHead(200, { "Content-Type": "application/json" });
-//                 return res.end(JSON.stringify(character))
-//             } else {
-//                 res.writeHead(404, { "Content-Type": "application/json" });
-//                 return res.end(JSON.stringify({error: 'Character not found'}))
-//             }
-//         }
-//     })
-//     .listen(3001, 'localhost');
+server.listen(PORT, () => {
+    console.log(`Listening on port ${PORT}`);
+});

@@ -8,10 +8,10 @@ const Detail = () => {
     const [character, setCharacter] = React.useState({});
 
     React.useEffect( () => {
-        const URL_BASE = "https://be-a-rym.up.railway.app/api";
-        const KEY = "45020e3e8f8b.95ada2dbf989fba4decf";
+        const URL_BASE = "http://localhost:3001";  
 
-        axios(`${URL_BASE}/character/${detailId}?key=${KEY}`).then((response)=>
+        axios(`${URL_BASE}/detail/${detailId}`)
+        .then((response)=>
             setCharacter(response.data)
             );
     }, []);

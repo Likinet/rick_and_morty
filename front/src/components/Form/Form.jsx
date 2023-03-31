@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import validation from "./validation";
 
-const Form = ({Login}) => {
+const Form = ({login, logout}) => {
     const [userData, setUserData] = useState({
         username:'',
         password:''
@@ -11,6 +11,10 @@ const Form = ({Login}) => {
         username:'',
         password:''
     });
+
+    useEffect(() => {
+        logout();
+    }, []);
 
     const handleInputChange = (event) => {
         const property = event.target.name;
@@ -22,7 +26,7 @@ const Form = ({Login}) => {
 
     const submitHandler = (event) => {
         event.preventDefault();
-        Login(userData);
+        login(userData);
     };
 
     return (
@@ -43,7 +47,7 @@ const Form = ({Login}) => {
                         onChange={handleInputChange} />
                 <p>{errors.password}</p>
             </div>
-            <button>Login</button>
+            <button type='submit' >Login</button>
         </form>
     )
 };

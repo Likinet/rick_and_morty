@@ -15,24 +15,23 @@ function App () {
   const {pathname} = useLocation();
   const [access, setAccess] = useState(false);
   const navigate = useNavigate();
-
+  
+  //!CREDENCIALES FALSAS PARA LOGUEO
+  const username = 'vivigalvagno@gmail.com';
+  const password = '123456';
+  
   useEffect(() => {
     !access && navigate('/')
   }, [access]);
   
-  //!CREDENCIALES FALSAS PARA LOGUEO
-  const username = 'vivigalvagno@gmail.com';
-  const password = '1234';
-
   //! EVENT HANDLERS
   const onSearch = (id) => {
-    const URL_BASE = "http://localhost:3001/rickandmorty/onsearch/";
-    // const KEY = "45020e3e8f8b.95ada2dbf989fba4decf";
+    const URL_BASE = "http://localhost:3001";
 
-    if (characters.find(char => char.id === id)){
+    if (characters.find(char => char.id == id)){
       return window.alert("personaje repetido");
     };
-    fetch(`${URL_BASE}/character/${id}`)
+    fetch(`${URL_BASE}/onsearch/${id}`)
       .then((response) => response.json())
       .then((data) => {
         if (data.name){
@@ -57,12 +56,17 @@ function App () {
     }
   };
 
+  const logout = () => {
+    setAccess(false);
+    navigate('/');
+  };
+
   //! RENDER
   return (
     <div>
-        {pathname !== '/' && <Nav onSearch={onSearch} />}
+        {pathname !== '/' && <Nav onSearch={onSearch}/>}
         <Routes>
-          <Route path='/' element= {<Form Login={login}/>}/>
+          <Route path='/' element= {<Form login={login} logout={logout}/>}/>
           <Route path='/home' element={<Cards characters={characters}
                                               onClose={onClose} />} />
           <Route path='/about' element={<About />} />
